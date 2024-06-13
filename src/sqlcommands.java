@@ -10,20 +10,19 @@ public class sqlcommands {
         Connection connection = null;
         connection = DriverManager.getConnection(URL);
         Statement statement = connection.createStatement();
-        boolean checkbox = true;
+
 
         username_in = "'" + username_in + "'";
         name_in = "'" + name_in + "'";
         surname_in = "'" + surname_in + "'";
         age_in = age_in;
-        String checkbox_in =  "'" + checkbox + "'";
 
         String values = surname_in + name_in + surname_in + age_in;
 
         System.out.println("Intended input summary: " + username_in + " " + name_in + " " + surname_in + " '" + age_in + "'" );
 
 
-        String data = "INSERT INTO users(username, name, surname, age, checkbox) VALUES (" + username_in + ", " + name_in + ", " + surname_in + ", " + age_in + ", " + checkbox_in + ");";
+        String data = "INSERT INTO users(username, name, surname, age) VALUES (" + username_in + ", " + name_in + ", " + surname_in + ", " + age_in + ");";
         statement.executeUpdate(data);
         statement.close();
         System.out.println("User inserted successfully \n");
@@ -228,7 +227,4 @@ public class sqlcommands {
 
         statement.close();
     }
-
-
-
 }
