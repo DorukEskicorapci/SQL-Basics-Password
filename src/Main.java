@@ -7,7 +7,7 @@ public class Main {
     static void operator() throws SQLException {
 
 
-        System.out.println("1.Select \n2.Insert \n3.Delete \n4.Update \n5.Exit ");
+        System.out.println("1.Select \n2.Insert \n3.Delete \n4.Update \n5.Look at the Password \n6.Set Password \n7.Exit ");
         System.out.print("\nEnter command number or name: ");
 
 
@@ -15,7 +15,7 @@ public class Main {
         Integer input = sc.nextInt();
         boolean count = false;
 
-        while (input < 5){
+        while (input < 7){
 
             if (count){
 
@@ -60,10 +60,25 @@ public class Main {
                 String updateinput = sc.next();
                 sqlcommands.update(updateinput);
 
-            } else if (input == 5) {
+            } else if (input == 7) {
 
                 break;
 
+            }else if(input == 5) {
+
+                sc.nextLine();
+                System.out.print("Type the username assigned to data you want to see password: ");
+                String username = sc.nextLine();
+
+                sqlcommands.passwordshow(username);
+
+
+            } else if (input == 6) {
+                sc.nextLine();
+                System.out.print("Type the username assigned to data you want to set password: ");
+                String username = sc.nextLine();
+
+                sqlcommands.passwordinsert(username);
             }
         }
 

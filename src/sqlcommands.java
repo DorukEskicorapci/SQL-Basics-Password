@@ -1,5 +1,7 @@
+import java.nio.charset.StandardCharsets;
 import java.sql.*;
 import java.util.Scanner;
+import java.util.Base64;
 
 public class sqlcommands {
     static final String URL = "jdbc:sqlite:db.db";
@@ -227,4 +229,169 @@ public class sqlcommands {
 
         statement.close();
     }
+
+
+    static void passwordinsert(String username_in) throws SQLException {
+
+        Connection connection = null;
+        connection = DriverManager.getConnection(URL);
+        Statement statement = connection.createStatement();
+
+        Scanner sc = new Scanner(System.in);
+
+        String name_in = "";
+        String surname_in = "";
+        int age_in = 0;
+
+        ResultSet resultSet = connection.createStatement().executeQuery("SELECT * FROM users;");
+
+        while(resultSet.next()) {
+            if(resultSet.getString("username").equals(username_in)) {
+                name_in = resultSet.getString("name");
+                surname_in = resultSet.getString("surname");
+                age_in = resultSet.getInt("age") ;
+            }
+        }
+
+        username_in = "'" + username_in + "'";
+        name_in = "'" + name_in + "'";
+        surname_in = "'" + surname_in + "'";
+        Integer check = 2;
+
+
+        while (check == 2) {
+            System.out.print("Intended data summary: " + username_in + " " + name_in + " " + surname_in + " '" + age_in + "'" + "\n");
+            System.out.print("\n1.Yes\n2.No" + "\nIs this account you?: ");
+            Integer check2 = sc.nextInt();
+            check = check2;
+            if (check == 1) {
+                sc.nextLine();
+                System.out.print("Type the password you want to assign to the data: ");
+                String password = sc.nextLine();
+
+                String enc_password = Base64.getEncoder().encodeToString(password.getBytes());
+                String data = "UPDATE users SET password = '" + enc_password + "' WHERE username = " + username_in + ";";
+                statement.executeUpdate(data);
+                System.out.println("Password inserted successfully \n");
+            } else if (check == 2) {
+
+                System.out.print("\nType the username again: ");
+                String deleteinput = sc.next();
+                ResultSet resultSet2 = connection.createStatement().executeQuery("SELECT * FROM users;");
+
+                while (resultSet2.next()) {
+                    if (resultSet2.getString("username").equals(deleteinput)) {
+                        username_in = "'"+ deleteinput+"'";
+                        name_in = resultSet2.getString("name");
+                        surname_in = resultSet2.getString("surname");
+                        age_in = resultSet2.getInt("age");
+                    } else {
+                        username_in = "NA";
+                        name_in = "";
+                        surname_in = "";
+                        //age_in;
+                    }
+                }
+            }
+        }
+
+
+        statement.close();
+
+
+
+
+        statement.close();
+
+
+    }
+
+    static void passwordshow(String username_in) throws SQLException {
+
+        Connection connection = null;
+        connection = DriverManager.getConnection(URL);
+        Statement statement = connection.createStatement();
+        Base64.Decoder decoder = Base64.getDecoder();
+
+        Scanner sc = new Scanner(System.in);
+
+        String name_in = "";
+        String surname_in = "";
+        int age_in = 0;
+
+        ResultSet resultSet = connection.createStatement().executeQuery("SELECT * FROM users;");
+        String enc_password = "";
+
+        while(resultSet.next()) {
+            if(resultSet.getString("username").equals(username_in)) {
+                name_in = resultSet.getString("name");
+                surname_in = resultSet.getString("surname");
+                age_in = resultSet.getInt("age") ;
+                enc_password =  resultSet.getString("password") ;
+            }
+        }
+
+        //username_in = "'" + username_in + "'";
+        name_in = "'" + name_in + "'";
+        surname_in = "'" + surname_in + "'";
+        Integer check = 2;
+
+
+        String password = "";
+
+        while (check == 2) {
+            System.out.print("Intended data summary: '" + username_in + "' " + name_in + " " + surname_in + " '" + age_in + "'" + "\n");
+            System.out.print("\n1.Yes\n2.No" + "\nIs this account you?: ");
+            Integer check2 = sc.nextInt();
+            check = check2;
+            if (check == 1) {
+
+
+                ResultSet resultSet2 = connection.createStatement().executeQuery("SELECT * FROM users;");
+                while(resultSet2.next()) {
+                    if(resultSet2.getString("username").equals(username_in)) {
+
+
+                        password = new String(decoder.decode(enc_password));
+                        System.out.println("Password: " + password);
+
+                    }
+                }
+
+
+
+
+            } else if (check == 2) {
+
+                System.out.print("\nType the username again: ");
+                String deleteinput = sc.next();
+                ResultSet resultSet2 = connection.createStatement().executeQuery("SELECT * FROM users;");
+
+                while (resultSet2.next()) {
+                    if (resultSet2.getString("username").equals(deleteinput)) {
+                        username_in = "'"+ deleteinput+"'";
+                        name_in = resultSet2.getString("name");
+                        surname_in = resultSet2.getString("surname");
+                        age_in = resultSet2.getInt("age");
+                    } else {
+                        username_in = "NA";
+                        name_in = "";
+                        surname_in = "";
+                        //age_in;
+                    }
+                }
+            }
+        }
+
+
+        statement.close();
+
+
+
+
+        statement.close();
+
+
+    }
+
 }
