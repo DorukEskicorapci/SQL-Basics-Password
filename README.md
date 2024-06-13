@@ -1,3 +1,5 @@
+﻿# Extension of SQL Basics (Password)
+
 This project is an extension for SQL Basics Project repository that includes password encoding feature.
 
 
